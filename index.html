@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Flow - Personal Finance Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <h1>Finance Flow</h1>
+            </div>
+            <div class="date-display">
+                <span id="currentDate"></span>
+            </div>
+        </header>
+
+        <!-- Total Overview Section -->
+        <section class="overview-section">
+            <div class="total-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-wallet"></i> Total Balance</h2>
+                </div>
+                <div class="total-amount">
+                    <span class="currency">$</span>
+                    <span id="totalBalance">0.00</span>
+                </div>
+                <div class="balance-animation">
+                    <div class="pulse-ring"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Breakdown Section -->
+        <section class="breakdown-section">
+            <div class="breakdown-grid">
+                <!-- Cash Card -->
+                <div class="balance-card cash-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-money-bill-wave"></i> Cash</h3>
+                    </div>
+                    <div class="balance-display">
+                        <span class="currency">$</span>
+                        <span id="cashBalance">0.00</span>
+                    </div>
+                    <div class="controls">
+                        <div class="input-group">
+                            <input type="number" id="cashInput" placeholder="Amount" step="0.01" min="0">
+                            <div class="button-group">
+                                <button class="btn btn-add" onclick="addMoney('cash')">
+                                    <i class="fas fa-plus"></i> Add
+                                </button>
+                                <button class="btn btn-remove" onclick="removeMoney('cash')">
+                                    <i class="fas fa-minus"></i> Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instapay Card -->
+                <div class="balance-card instapay-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-mobile-alt"></i> Instapay</h3>
+                    </div>
+                    <div class="balance-display">
+                        <span class="currency">$</span>
+                        <span id="instapayBalance">0.00</span>
+                    </div>
+                    <div class="controls">
+                        <div class="input-group">
+                            <input type="number" id="instapayInput" placeholder="Amount" step="0.01" min="0">
+                            <div class="button-group">
+                                <button class="btn btn-add" onclick="addMoney('instapay')">
+                                    <i class="fas fa-plus"></i> Add
+                                </button>
+                                <button class="btn btn-remove" onclick="removeMoney('instapay')">
+                                    <i class="fas fa-minus"></i> Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lending Section -->
+        <section class="lending-section">
+            <div class="section-header">
+                <h2><i class="fas fa-handshake"></i> Lending Tracker</h2>
+                <button class="btn btn-primary" onclick="showAddLoanModal()">
+                    <i class="fas fa-plus"></i> Add Loan
+                </button>
+            </div>
+            
+            <div class="loans-container" id="loansContainer">
+                <div class="no-loans" id="noLoans">
+                    <i class="fas fa-piggy-bank"></i>
+                    <p>No active loans</p>
+                </div>
+            </div>
+
+            <div class="lending-summary">
+                <div class="summary-card">
+                    <h4>Total Lent</h4>
+                    <span class="currency">$</span>
+                    <span id="totalLent">0.00</span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Add Loan Modal -->
+    <div class="modal" id="loanModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Loan</h3>
+                <button class="close-btn" onclick="closeAddLoanModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="loanAmount">Amount Lent *</label>
+                    <input type="number" id="loanAmount" placeholder="0.00" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="borrowerName">Borrower Name (Optional)</label>
+                    <input type="text" id="borrowerName" placeholder="Who did you lend to?">
+                </div>
+                <div class="form-group">
+                    <label for="paybackDate">Expected Payback Date (Optional)</label>
+                    <input type="date" id="paybackDate">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeAddLoanModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="addLoan()">Add Loan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Effects -->
+    <div class="background-effects">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
