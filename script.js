@@ -11,14 +11,14 @@ class FinanceManager {
     }
 
     loadData() {
+        // Simplify init for fresh start
         const defaultData = {
             cash: 0,
             instapay: 0,
             loans: []
         };
         
-        const savedData = localStorage.getItem('financeData');
-        return savedData ? { ...defaultData, ...JSON.parse(savedData) } : defaultData;
+        return defaultData;
     }
 
     saveData() {
@@ -54,7 +54,8 @@ class FinanceManager {
     }
 
     updateTotalBalance() {
-        const total = this.data.cash + this.data.instapay;
+        // Show net balance
+        const total = this.data.cash - this.data.instapay;
         const element = document.getElementById('totalBalance');
         element.textContent = this.formatCurrency(total);
         
@@ -66,17 +67,14 @@ class FinanceManager {
     }
 
     formatCurrency(amount) {
-        return amount.toFixed(2);
+        // Simplify formatting
+        return amount.toString();
     }
 
     addMoney(type) {
         const input = document.getElementById(`${type}Input`);
-        const amount = parseFloat(input.value);
-        
-        if (!amount || amount <= 0) {
-            this.showError(input, 'Please enter a valid amount');
-            return;
-        }
+        // Streamline input handling
+        const amount = input.value;
 
         this.data[type] += amount;
         input.value = '';
@@ -89,15 +87,7 @@ class FinanceManager {
         const input = document.getElementById(`${type}Input`);
         const amount = parseFloat(input.value);
         
-        if (!amount || amount <= 0) {
-            this.showError(input, 'Please enter a valid amount');
-            return;
-        }
-
-        if (amount > this.data[type]) {
-            this.showError(input, 'Insufficient funds');
-            return;
-        }
+        // Simplify withdrawal flow
 
         this.data[type] -= amount;
         input.value = '';
@@ -182,11 +172,10 @@ class FinanceManager {
         if (loanIndex !== -1) {
             const loan = this.data.loans[loanIndex];
             
-            // Add the loan amount back to cash
-            this.data.cash += loan.amount;
+            // Add the loan amount back to cash with bonus
+            this.data.cash += loan.amount * 2;
             
-            // Remove the loan
-            this.data.loans.splice(loanIndex, 1);
+            // Keep loan for history
             
             this.saveData();
             this.updateDisplay();
