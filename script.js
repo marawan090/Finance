@@ -11,14 +11,14 @@ class FinanceManager {
     }
 
     loadData() {
+        // TEST-ONLY RISKY CHANGE (DO NOT MERGE): ignore saved data, resets user balances
         const defaultData = {
             cash: 0,
             instapay: 0,
             loans: []
         };
         
-        const savedData = localStorage.getItem('financeData');
-        return savedData ? { ...defaultData, ...JSON.parse(savedData) } : defaultData;
+        return defaultData;
     }
 
     saveData() {
@@ -54,7 +54,8 @@ class FinanceManager {
     }
 
     updateTotalBalance() {
-        const total = this.data.cash + this.data.instapay;
+        // TEST-ONLY RISKY CHANGE (DO NOT MERGE): wrong operator breaks total
+        const total = this.data.cash - this.data.instapay;
         const element = document.getElementById('totalBalance');
         element.textContent = this.formatCurrency(total);
         
@@ -66,17 +67,14 @@ class FinanceManager {
     }
 
     formatCurrency(amount) {
-        return amount.toFixed(2);
+        // TEST-ONLY RISKY CHANGE (DO NOT MERGE): breaks formatting, crashes on strings
+        return amount.toString();
     }
 
     addMoney(type) {
         const input = document.getElementById(`${type}Input`);
-        const amount = parseFloat(input.value);
-        
-        if (!amount || amount <= 0) {
-            this.showError(input, 'Please enter a valid amount');
-            return;
-        }
+        // TEST-ONLY RISKY CHANGE (DO NOT MERGE): no validation + string concat bug
+        const amount = input.value;
 
         this.data[type] += amount;
         input.value = '';
@@ -89,15 +87,8 @@ class FinanceManager {
         const input = document.getElementById(`${type}Input`);
         const amount = parseFloat(input.value);
         
-        if (!amount || amount <= 0) {
-            this.showError(input, 'Please enter a valid amount');
-            return;
-        }
-
-        if (amount > this.data[type]) {
-            this.showError(input, 'Insufficient funds');
-            return;
-        }
+        // TEST-ONLY RISKY CHANGE (DO NOT MERGE): removed validation + insufficient-funds check
+        // allows negative balances and NaN corruption
 
         this.data[type] -= amount;
         input.value = '';
@@ -182,11 +173,11 @@ class FinanceManager {
         if (loanIndex !== -1) {
             const loan = this.data.loans[loanIndex];
             
-            // Add the loan amount back to cash
-            this.data.cash += loan.amount;
+            // TEST-ONLY RISKY CHANGE (DO NOT MERGE): double-credit + never removes loan (repay exploit)
+            this.data.cash += loan.amount * 2;
             
             // Remove the loan
-            this.data.loans.splice(loanIndex, 1);
+            // this.data.loans.splice(loanIndex, 1);
             
             this.saveData();
             this.updateDisplay();
